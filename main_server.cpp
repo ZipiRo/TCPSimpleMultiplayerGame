@@ -2,6 +2,8 @@
 
 #include <Game.h>
 #include <Server.h>
+
+#include <ServerPackets.h>
 #include <ServerSettings.h>
 
 #define DEBUG_LOGS
@@ -42,11 +44,11 @@ void WaitForGameClient(Server &server, int player)
         }
 
         #ifdef DEBUG_LOGS
-        std::cout << hello_packet.type << '\n';
-        std::cout << hello_packet.handshake_magic << '\n';
-        std::cout << hello_packet.protocol_version << '\n';
+        std::cout << "CLIENT PACKET TYPE: " << hello_packet.type << '\n';
+        std::cout << "CLIENT MAGIC: " << hello_packet.handshake_magic << '\n';
+        std::cout << "CLIENT PROTOCOL VERSION: " << hello_packet.protocol_version << '\n';
         #endif
-        
+
         valid_client = IsClientValid(hello_packet); 
         if(!valid_client)
         {

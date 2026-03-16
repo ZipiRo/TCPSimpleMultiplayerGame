@@ -3,6 +3,8 @@
 
 #include <Game.h>
 #include <Client.h>
+
+#include <ServerPackets.h>
 #include <ServerSettings.h>
 
 int main()
