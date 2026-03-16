@@ -7,7 +7,7 @@ int main()
 {
     Client client;
 
-    ConnectToServer(client, "127.0.0.1", 54000);
+    client.Connect("127.0.0.1", 54000);
 
     while (true)
     {
@@ -16,14 +16,16 @@ int main()
         std::cout << "Damage: ";
         std::cin >> action.damage;
 
-        SendPacket(client.socket, &action, sizeof(action));
+        SendPacket(client.network_socket, &action, sizeof(action));
 
         GameState state;
 
-        ReceivePacket(client.socket, &state, sizeof(state));
+        ReceivePacket(client.network_socket, &state, sizeof(state));
 
         std::cout << "Enemy Health: " << state.player[1].health << '\n';
     }
     
+    client.Close();
+
     return 0;
 }

@@ -7,26 +7,28 @@ int main()
 {
     Server server;
 
-    CreateServer(server, 54000);
+    server.Create(54000);
+
+    std::cout << "LISTENING ON PORT: 54000\n";
 
     std::cout << "WAITING FOR CLIENT 1\n";
     
     int error = 0;
-    error = WaitForClient(server); 
+    error = server.WaitForClient(); 
     if(error != 1)
     {
         std::cout << "ACCEPT FAILED WITH ERROR\n" << error << '\n';
-        CloseServer(server);
+        server.Close();
         return 0;
     }
 
     std::cout << "WAITING FOR CLIENT 2\n";
 
-    error = WaitForClient(server); 
+    error = server.WaitForClient(); 
     if(error != 1)
     {
         std::cout << "ACCEPT FAILED WITH ERROR\n" << error << '\n';
-        CloseServer(server);
+        server.Close();
         return 0;
     }
 
@@ -47,6 +49,8 @@ int main()
         SendPacket(server.client_socket[0], &game, sizeof(game));
         SendPacket(server.client_socket[1], &game, sizeof(game));
     }
+
+    server.Close();
 
     return 0;
 }

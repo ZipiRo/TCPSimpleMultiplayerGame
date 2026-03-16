@@ -6,34 +6,34 @@
 
 struct Client
 {
-    SOCKET socket;
-};
+    SOCKET network_socket;
 
-bool ConnectToServer(Client &client, const char* ip, int port)
-{
-    WSADATA wsdata;
-    WSAStartup(MAKEWORD(2, 2), &wsdata);
-
-    client.socket = socket(AF_INET, SOCK_STREAM, 0);
-
-    sockaddr_in server{};
-    server.sin_family = AF_INET;
-    server.sin_port = htons(port);
-
-    inet_pton(AF_INET, ip, &server.sin_addr);
-
-    if(connect(client.socket, (sockaddr *)&server, sizeof(server)) == SOCKET_ERROR)
+    bool Connect(const char* ip, int port)
     {
-        closesocket(client.socket);
-        WSACleanup();
-        return false;
+        WSADATA wsdata;
+        WSAStartup(MAKEWORD(2, 2), &wsdata);
+
+        network_socket = socket(AF_INET, SOCK_STREAM, 0);
+
+        sockaddr_in server{};
+        server.sin_family = AF_INET;
+        server.sin_port = htons(port);
+
+        inet_pton(AF_INET, ip, &server.sin_addr);
+
+        if(connect(network_socket, (sockaddr *)&server, sizeof(server)) == SOCKET_ERROR)
+        {
+            closesocket(network_socket);
+            WSACleanup();
+            return false;
+        }
+
+        return true;
     }
-
-    return true;
-}
-
-void CloseClient(Client &client)
-{
-    shutdown(client.socket, SD_BOTH);
-    closesocket(client.socket);
-}
+    
+    void Close()
+    {
+        shutdown(network_socket, SD_BOTH);
+        closesocket(network_socket);
+    }
+};
