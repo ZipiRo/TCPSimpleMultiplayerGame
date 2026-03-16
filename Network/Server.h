@@ -5,6 +5,8 @@
 
 const int MAX_CLIENTS = 2;
 
+#define CLIENT_OK 1
+
 struct Server
 {
     SOCKET listen_socket;
@@ -45,7 +47,7 @@ struct Server
 
         client_count++;
 
-        return 1;
+        return CLIENT_OK;
     }
 
     void Close()

@@ -1,0 +1,2 @@
+const int SERVER_PROTOCOL_VERSION = 1;
+const int HANDSHAKE_MAGIC = 0xCAFBE;

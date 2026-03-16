@@ -2,54 +2,86 @@
 
 #include <Game.h>
 #include <Server.h>
+#include <ServerSettings.h>
+
+#define DEBUG_LOGS
+
+bool IsClientValid(const HelloPacket &packet)
+{
+    if(packet.type != PacketType::PACKET_HELLO ||
+        packet.handshake_magic != HANDSHAKE_MAGIC ||
+        packet.protocol_version != SERVER_PROTOCOL_VERSION) 
+            return false;
+
+    return true;
+}
+
+void WaitForGameClient(Server &server, int player)
+{
+    bool valid_client = false;
+
+    while (!valid_client)
+    {
+        int result = 0;
+        while (result != CLIENT_OK) 
+        {
+            result = server.WaitForClient();
+
+            if(result != CLIENT_OK)
+            {
+                std::cout << "CLIENT HAD SOME ERRORS: " << result << '\n';
+                std::cout << "TRY AGAIN...\n";
+            }
+        }
+
+        HelloPacket hello_packet;
+        if(!ReceivePacket(server.client_socket[player], &hello_packet, sizeof(HelloPacket)))
+        {
+            std::cout << "FAILED TO RECEIVE HELLO PACKET!\n";
+            continue; 
+        }
+
+        #ifdef DEBUG_LOGS
+        std::cout << hello_packet.type << '\n';
+        std::cout << hello_packet.handshake_magic << '\n';
+        std::cout << hello_packet.protocol_version << '\n';
+        #endif
+        
+        valid_client = IsClientValid(hello_packet); 
+        if(!valid_client)
+        {
+            std::cout << "THE CLIENT IS NOT VALID, TRY AGAIN...\n";
+        }
+    }
+
+    std::cout << "Player " << player << " has connected!\n";
+}
 
 int main()
 {
     Server server;
-
     server.Create(54000);
 
-    std::cout << "LISTENING ON PORT: 54000\n";
+    #ifdef DEBUG_LOGS
+    std::cout << "EXPECTED MAGIC: " << HANDSHAKE_MAGIC << '\n';
+    std::cout << "EXPECTED PROTOCOL_VERSION: " << SERVER_PROTOCOL_VERSION << '\n';
+    #endif
 
-    std::cout << "WAITING FOR CLIENT 1\n";
+    WellcomePacket wellcome_packet;
+
+    for(int player = 0; player < MAX_CLIENTS; player++)
+    {
+        std::cout << "WAITING FOR PLAYER: " << player << '\n';
+        WaitForGameClient(server, player);    
+        wellcome_packet.player_id = player;   
+
+        if(!SendPacket(server.client_socket[player], &wellcome_packet, sizeof(WellcomePacket)))
+        {
+            std::cout << "FAILED TO SEND HELLO PACKET!\n";
+            player--; 
+        }
+    }
     
-    int error = 0;
-    error = server.WaitForClient(); 
-    if(error != 1)
-    {
-        std::cout << "ACCEPT FAILED WITH ERROR\n" << error << '\n';
-        server.Close();
-        return 0;
-    }
-
-    std::cout << "WAITING FOR CLIENT 2\n";
-
-    error = server.WaitForClient(); 
-    if(error != 1)
-    {
-        std::cout << "ACCEPT FAILED WITH ERROR\n" << error << '\n';
-        server.Close();
-        return 0;
-    }
-
-    GameState game;
-    Engine::Init(game);
-    Engine::Start(game);
-
-    while(game.game_phase == PLAY)
-    {
-        HitAction action;
-
-        ReceivePacket(server.client_socket[game.current_player], &action, sizeof(action));
-
-        std::cout << "PLAYER " << game.current_player + 1 << "HIT\n";
-        
-        Engine::Hit(game, action);
-
-        SendPacket(server.client_socket[0], &game, sizeof(game));
-        SendPacket(server.client_socket[1], &game, sizeof(game));
-    }
-
     server.Close();
 
     return 0;
