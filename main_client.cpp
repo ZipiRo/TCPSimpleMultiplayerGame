@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 
 #include <Game.h>
 #include <Client.h>
@@ -8,7 +9,11 @@ int main()
 {
     Client client;
 
-    client.Connect("127.0.0.1", 54000);
+    std::string ip; int port;
+    std::cout << "IP & PORT\n";
+    std::cin >> ip >> port;
+
+    client.Connect(ip.c_str(), port);
 
     HelloPacket hello_packet;
     hello_packet.handshake_magic = HANDSHAKE_MAGIC;
