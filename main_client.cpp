@@ -76,15 +76,15 @@ int main()
             }
 
             game_state = gamestate_packet.game_state;
-            
+
             continue;
         }
 
         std::cout << "YOU ARE PLAYER " << player_id << '\n'; 
         std::cout << "HEALTH: " << game_state.player[player_id].health << '\n';
         std::cout << "HITS: " << game_state.player[player_id].hit_count << '\n';
-        std::cout << "MAX_DAMAGE " << game_state.player[player_id].max_damage << '\n';
         std::cout << "MIN_DAMAGE " << game_state.player[player_id].min_damage << '\n';
+        std::cout << "MAX_DAMAGE " << game_state.player[player_id].max_damage << '\n';
         
         std::cout << "==============================================\n";
 
