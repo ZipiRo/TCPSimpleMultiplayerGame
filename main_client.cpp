@@ -193,6 +193,10 @@ int main()
         system("cls");
         std::cout << "YOU ARE PLAYER " << player_id << '\n'; 
         std::cout << "PLAYER: " << game_state.winner << " IS THE WINNER WITH " << game_state.player[game_state.winner].hit_count << " HIT\\S\n";
+        std::cout << "===============================================================\n";
+        std::cout << "PRESS ANY KEY TO CONTINUE...\n";
+
+        getch();
     }
 
     client.Close();
