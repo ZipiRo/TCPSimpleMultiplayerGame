@@ -66,6 +66,17 @@ int main()
         if(game_state.current_player != player_id)
         {
             std::cout << "WAITING FOR THE OTHER PLAYER...\n";
+
+            if(!ReceivePacket(client.network_socket, &gamestate_packet, sizeof(GameStatePacket)))
+            {
+                std::cout << "FAILED TO RECEIVE GAMESTATE PACKET!\n";
+            
+                client.Close();
+                return 1;
+            }
+
+            game_state = gamestate_packet.game_state;
+            
             continue;
         }
 

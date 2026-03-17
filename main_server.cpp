@@ -65,11 +65,11 @@ bool SendPacketToPlayers(Server& server, const void* packet, int size)
     {
         if(!SendPacket(server.client_socket[player], packet, size))
         {
-            std::cout << "FAILED TO SEND GAMESTATE PACKET!\n";
+            std::cout << "FAILED TO SEND PACKET!\n";
             return false;
         }
 
-        std::cout << "GAMESTATE PACKET SENT TO PLAYER " << player << '\n';
+        std::cout << "PACKET SENT TO PLAYER " << player << '\n';
     }
 
     return true;
@@ -106,7 +106,7 @@ int main()
     Engine::Start(game_state);
 
     GameStatePacket gamestate_packet;
-    gamestate_packet.game_state;
+    gamestate_packet.game_state = game_state;
 
     if(!SendPacketToPlayers(server, &gamestate_packet, sizeof(GameStatePacket)))
     {
@@ -134,13 +134,15 @@ int main()
             break;
         }
 
+        int player_id = game_state.current_player;
+
         HitResult hit_result = Engine::Hit(game_state, action_packet.action);
-        
+ 
         HitResultPacket hitresult_packet;
-        hitresult_packet.player_id = game_state.current_player;
+        hitresult_packet.player_id = player_id;
         hitresult_packet.hit_result = hit_result;
 
-        if(!SendPacket(server.client_socket[game_state.current_player], &hitresult_packet, sizeof(HitResultPacket)))
+        if(!SendPacket(server.client_socket[player_id], &hitresult_packet, sizeof(HitResultPacket)))
         {
             std::cout << "FAILED TO SEND HIT RESULT PACKET!\n";
             break;
