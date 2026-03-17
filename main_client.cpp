@@ -178,6 +178,12 @@ int main()
         game_state = gamestate_packet.game_state;
     }
 
+    if(game_state.game_phase == GamePhase::GAMEOVER)
+    {
+        system("cls");
+        std::cout << "PLAYER: " << game_state.winner << " IS THE WINNER WITH " << game_state.player[game_state.winner].hit_count << " HIT\\S\n";
+    }
+
     client.Close();
 
     return 0;
