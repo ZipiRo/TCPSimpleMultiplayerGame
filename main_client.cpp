@@ -104,7 +104,7 @@ int main()
         HitResultPacket hitresult_packet;
         if(!ReceivePacket(client.network_socket, &hitresult_packet, sizeof(HitResultPacket)))
         {
-            std::cout << "FAILED TO RECEIVE HITRESULT PACKET!\n";
+            std::cout << "FAILED TO RECEIVE HIT RESULT PACKET!\n";
 
             client.Close();
             return 1;

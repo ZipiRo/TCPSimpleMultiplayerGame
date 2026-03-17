@@ -110,7 +110,7 @@ int main()
 
     if(!SendPacketToPlayers(server, &gamestate_packet, sizeof(GameStatePacket)))
     {
-        std::cout << "FAILED TO SEND STARTGAME PACKET TO PLAYRS!\n";
+        std::cout << "FAILED TO SEND STARTGAME PACKET TO PLAYERS!\n";
 
         server.Close();
         return 1;
