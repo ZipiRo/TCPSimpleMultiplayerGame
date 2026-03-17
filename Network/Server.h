@@ -1,3 +1,9 @@
+/*
+    SERVER STRUCTURE AND METHODS
+
+    By ZipiRo
+*/
+
 #pragma once
 
 #include <winsock2.h>

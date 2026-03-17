@@ -1,3 +1,9 @@
+/*
+    MAIN FUNCTIONS FOR SENDING AND RECEIVEING PACKETS
+
+    By ZipiRo
+*/
+
 #pragma once
 
 #include <winsock2.h>

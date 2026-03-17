@@ -1,3 +1,9 @@
+/*
+    CLIENT FOR MULTIPLAYER GAME 
+
+    By ZipiRo
+*/
+
 #include <iostream>
 #include <string>
 

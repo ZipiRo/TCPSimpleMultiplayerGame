@@ -1,3 +1,9 @@
+/*
+    SERVER FOR MULTIPLAYER GAME 
+
+    By ZipiRo
+*/
+
 #include <iostream>
 
 #include <Game.h>

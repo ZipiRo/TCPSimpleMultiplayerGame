@@ -1,3 +1,9 @@
+/*
+    PLAYER & GAME STATES FOR THE ENGINE  
+
+    By ZipiRo
+*/
+
 #pragma once
 
 #include <random>

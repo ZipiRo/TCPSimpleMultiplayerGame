@@ -1,3 +1,9 @@
+/*
+    PACKETS & TYPES THAT ARE SENT THROUGH THE SERVER 
+
+    By ZipiRo
+*/
+
 #pragma once
 
 #include <Game.h>

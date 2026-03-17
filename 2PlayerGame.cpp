@@ -1,3 +1,12 @@
+/*
+    THIS IS THE 2 PLAYER SAME PC GAME
+    
+    THIS IS THE NORMAL GAME WHERE THE PLAYERS GET SOME MIN AND MAX DAMAGE TO DEAL 
+    AND A HEALTH TARGET THAT THEY WILL LOOSE AT OR WIN IF IT IS OVER IT
+
+    By ZipiRo
+*/
+
 #include <iostream>
 #include <random>
 #include <conio.h>
