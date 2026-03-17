@@ -100,6 +100,7 @@ int main()
         }
     }
 
+    srand(time(0));
     GameState game_state;
 
     Engine::Init(game_state); 
