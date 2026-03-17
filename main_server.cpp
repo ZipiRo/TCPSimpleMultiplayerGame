@@ -62,7 +62,7 @@ void WaitForGameClient(Server &server, int player)
 bool SendPacketToPlayers(Server& server, const void* packet, int size)
 {
     for(int player = 0; player < MAX_CLIENTS; player++)
-    {b
+    {
         if(!SendPacket(server.client_socket[player], packet, size))
         {
             std::cout << "FAILED TO SEND GAMESTATE PACKET!\n";
