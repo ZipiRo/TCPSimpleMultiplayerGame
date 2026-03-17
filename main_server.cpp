@@ -6,8 +6,6 @@
 #include <ServerPackets.h>
 #include <ServerSettings.h>
 
-#define DEBUG_LOGS
-
 bool IsClientValid(const HelloPacket &packet)
 {
     if(packet.type != PacketType::PACKET_HELLO ||
@@ -43,11 +41,9 @@ void WaitForGameClient(Server &server, int player)
             continue; 
         }
 
-        #ifdef DEBUG_LOGS
         std::cout << "CLIENT PACKET TYPE: " << hello_packet.type << '\n';
         std::cout << "CLIENT MAGIC: " << hello_packet.handshake_magic << '\n';
         std::cout << "CLIENT PROTOCOL VERSION: " << hello_packet.protocol_version << '\n';
-        #endif
 
         valid_client = IsClientValid(hello_packet); 
         if(!valid_client)
@@ -77,13 +73,18 @@ bool SendPacketToPlayers(Server& server, const void* packet, int size)
 
 int main()
 {
-    Server server;
-    server.Create(54000);
+    int port;
 
-    #ifdef DEBUG_LOGS
+    std::cout << "PORT\n";
+    std::cin >> port;
+
+    Server server;
+    server.Create(port);
+
+    std::cout << "LISTENING ON PORT " << port << '\n';
+
     std::cout << "EXPECTED MAGIC: " << HANDSHAKE_MAGIC << '\n';
     std::cout << "EXPECTED PROTOCOL_VERSION: " << SERVER_PROTOCOL_VERSION << '\n';
-    #endif
 
     WellcomePacket wellcome_packet;
 
@@ -121,29 +122,31 @@ int main()
 
     while(game_state.game_phase == GamePhase::PLAY)
     {
+        int current_player = game_state.current_player;
+        
+        std::cout << "WAITING ACTION FROM PLAYER: " << current_player << "\n";
+
         HitActionPacket action_packet;
 
-        if(!ReceivePacket(server.client_socket[game_state.current_player], &action_packet, sizeof(HitActionPacket)))
+        if(!ReceivePacket(server.client_socket[current_player], &action_packet, sizeof(HitActionPacket)))
         {
             std::cout << "FAILED TO RECEIVE HIT ACTION PACKET!\n";
             break;
         }
 
-        if(action_packet.player_id != game_state.current_player)
+        if(action_packet.player_id != current_player)
         {
-            std::cout << "PLAYER ID " << action_packet.player_id << " IS NOT THE CURRENT PLAYER " << game_state.current_player <<"!\n";
+            std::cout << "PLAYER ID " << action_packet.player_id << " IS NOT THE CURRENT PLAYER " << current_player <<"!\n";
             break;
         }
-
-        int player_id = game_state.current_player;
 
         HitResult hit_result = Engine::Hit(game_state, action_packet.action);
  
         HitResultPacket hitresult_packet;
-        hitresult_packet.player_id = player_id;
+        hitresult_packet.player_id = current_player;
         hitresult_packet.hit_result = hit_result;
 
-        if(!SendPacket(server.client_socket[player_id], &hitresult_packet, sizeof(HitResultPacket)))
+        if(!SendPacket(server.client_socket[current_player], &hitresult_packet, sizeof(HitResultPacket)))
         {
             std::cout << "FAILED TO SEND HIT RESULT PACKET!\n";
             break;

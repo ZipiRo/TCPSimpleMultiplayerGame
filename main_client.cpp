@@ -88,8 +88,8 @@ int main()
         
         std::cout << "==============================================\n";
 
-        std::cout << "OTHER PLAYER HEALTH: " << game_state.player[1 - game_state.current_player].health << '\n';
-        std::cout << "OTHER PLAYER TARGET HEALTH: " << game_state.player[1 - game_state.current_player].loose_health << '\n';
+        std::cout << "OTHER PLAYER HEALTH: " << game_state.player[1 - player_id].health << '\n';
+        std::cout << "OTHER PLAYER TARGET HEALTH: " << game_state.player[1 - player_id].loose_health << '\n';
         
         std::cout << "==============================================\n";
 
