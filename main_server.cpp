@@ -159,6 +159,14 @@ int main()
         }
     }
 
+    GameStatePacket gamestate_packet;
+    gamestate_packet.game_state = game_state; 
+
+    if(!SendPacketToPlayers(server, &gamestate_packet, sizeof(GameStatePacket)))
+    {
+        std::cout << "FAILED TO SEND GAME STATE TO PLAYERS\n";
+    }
+
     server.Close();
 
     return 0;

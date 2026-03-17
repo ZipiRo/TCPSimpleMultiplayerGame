@@ -134,7 +134,7 @@ int main()
         if(hit_result == HIT_OK)
         {
             system("cls");
-            std::cout << "PLAYER: " << player_id + 1 << '\n';
+            std::cout << "PLAYER: " << player_id << '\n';
             std::cout << "ENEMY TOOK : " << hit_action.damage << " POINTS OF DAMAGE\n";
 
             int difference = game_state.player[1 - game_state.current_player].health - 
@@ -150,7 +150,7 @@ int main()
         else if(hit_result == HIT_GAME_OVER)
         {
             system("cls");
-            std::cout << "PLAYER: " << player_id + 1 << " CAUSED GAME END\n";
+            std::cout << "PLAYER: " << player_id << " CAUSED GAME END\n";
             std::cout << "===============================================================\n";
             std::cout << "PRESS ANY KEY TO CONTINUE...\n";
 
@@ -177,6 +177,16 @@ int main()
 
         game_state = gamestate_packet.game_state;
     }
+
+    if(!ReceivePacket(client.network_socket, &gamestate_packet, sizeof(GameStatePacket)))
+    {
+        std::cout << "FAILED TO RECEIVE GAMESTATE PACKET!\n";
+    
+        client.Close();
+        return 1;
+    }
+
+    game_state = gamestate_packet.game_state;
 
     if(game_state.game_phase == GamePhase::GAMEOVER)
     {
