@@ -149,7 +149,6 @@ int main()
             break;
         }
 
-        GameStatePacket gamestate_packet;
         gamestate_packet.game_state = game_state; 
 
         if(!SendPacketToPlayers(server, &gamestate_packet, sizeof(GameStatePacket)))
@@ -159,7 +158,6 @@ int main()
         }
     }
 
-    GameStatePacket gamestate_packet;
     gamestate_packet.game_state = game_state; 
 
     if(!SendPacketToPlayers(server, &gamestate_packet, sizeof(GameStatePacket)))
